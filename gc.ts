@@ -1,8 +1,12 @@
+function replaceAll(str: string, find: string, replace: string) {
+  return str.replace(new RegExp(find, 'g'), replace);
+}
+
 export const GCJson = {
   "type": "service_account",
   "project_id": "hackathon-survival-guide",
   "private_key_id": process.env.GC_PRIVATE_KEY_ID,
-  "private_key": process.env.GC_PRIVATE_KEY,
+  "private_key": replaceAll(process.env.GC_PRIVATE_KEY as string, "\\\\n", "\n"),
   "client_email": "onerecord2@hackathon-survival-guide.iam.gserviceaccount.com",
   "client_id": "115533632857953660552",
   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
