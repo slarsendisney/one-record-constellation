@@ -166,9 +166,7 @@ export function StepThree() {
           return resJson;
         })
       );
-      setResponse2(
-        JSON.stringify({ ids: [responses[0], responses[1]] }, null, 2)
-      );
+      setResponse2(JSON.stringify([responses[0], responses[1]], null, 2));
       setIsResponseSuccessful2(true);
       smoothScroll(continueRef2);
     } catch (error) {
@@ -234,7 +232,7 @@ export function StepThree() {
           id="3-one-record-server-url"
           type="text"
           value={serverUrl}
-          onChange={(e) => setServerUrl(e.target.value)}
+          readOnly
         />
       </div>
 
@@ -398,29 +396,31 @@ export function StepThree() {
         </div>
       </Reveal>
 
-      <GuideSuccess
-        title="Logistics Objects created"
-        show={isResponseSuccessful3}
-      >
-        <p>
-          We have now populated our ONE Record server with Logistics Objects
-          that are ready to track your Product as it ships its way across the
-          world.
-        </p>
-        <p>
-          Let&apos;s send some events to update the status of the product as it
-          is shipped on each part of its journey.
-        </p>
-        <div>
-          <button
-            className="bg-green-600 rounded-md px-2 py-1 text-white"
-            onClick={nextStep}
-            disabled={currentStep !== 3}
-          >
-            Continue
-          </button>
-        </div>
-      </GuideSuccess>
+      <div ref={continueRef3}>
+        <GuideSuccess
+          title="Logistics Objects created"
+          show={isResponseSuccessful3}
+        >
+          <p>
+            We have now populated our ONE Record server with Logistics Objects
+            that are ready to track your Product as it ships its way across the
+            world.
+          </p>
+          <p>
+            Let&apos;s send some events to update the status of the product as
+            it is shipped on each part of its journey.
+          </p>
+          <div>
+            <button
+              className="bg-green-600 rounded-md px-2 py-1 text-white"
+              onClick={nextStep}
+              disabled={currentStep !== 3}
+            >
+              Continue
+            </button>
+          </div>
+        </GuideSuccess>
+      </div>
     </div>
   );
 }

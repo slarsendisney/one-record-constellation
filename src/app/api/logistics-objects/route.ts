@@ -87,7 +87,11 @@ export async function POST(request: NextRequest) {
         ids: admin.firestore.FieldValue.arrayUnion(id),
       });
 
-    return NextResponse.json({ "@id": `${server_url}/%${id}` });
+    return NextResponse.json({
+      headers: {
+        location: `${server_url}/%${id}`,
+      },
+    });
   } catch (error) {
     console.log(error);
   }
