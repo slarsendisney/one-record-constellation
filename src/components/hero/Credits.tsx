@@ -7,7 +7,8 @@ export const Credits = (): JSX.Element => {
     <div className="absolute bottom-0 p-2 flex flex-col w-full items-center text-white justify-center space-y-2">
       <p className="text-xs uppercase opacity-70">Built by</p>
       <div className="flex items-center gap-2">
-        <m.button
+        <m.a
+        href="https://sld.codes"
           initial={{
             scale: 1,
             opacity: 0.8,
@@ -24,9 +25,10 @@ export const Credits = (): JSX.Element => {
             height={40}
             className="rounded-full"
           />
-        </m.button>
+        </m.a>
         <p className="opacity-70 text-2xl">&</p>
-        <m.button
+        <m.a
+         href="https://ryangregory.dev"
           initial={{
             scale: 1,
             opacity: 0.8,
@@ -43,7 +45,7 @@ export const Credits = (): JSX.Element => {
             height={40}
             className="rounded-full"
           />
-        </m.button>
+        </m.a>
       </div>
     </div>
   );
