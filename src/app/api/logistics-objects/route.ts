@@ -77,11 +77,12 @@ export async function POST(request: NextRequest) {
       method: "POST",
       headers: {
         Authorization: authorization,
+        Accept: "application/ld+json",
         "Content-Type": "application/ld+json",
       },
-      body: JSON.stringify(logistics_object),
+      body: logistics_object,
     });
-    const id = res.headers.get("location")?.split(server_url)[1];
+    const id = res.headers.get("location")?.split(`${server_url}/`)[1];
 
     await storage
       .collection("data")
@@ -90,7 +91,7 @@ export async function POST(request: NextRequest) {
         ids: admin.firestore.FieldValue.arrayUnion(id),
       });
 
-    return NextResponse.json({ id });
+    return NextResponse.json({ "@id": `${server_url}/%${id}` });
   } catch (error) {
     console.log(error);
   }
