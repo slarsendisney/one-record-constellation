@@ -1,14 +1,14 @@
-
-import { Configuration, OpenAIApi } from 'openai';
+import { Configuration, OpenAIApi } from "openai";
 import {
   CreateChatCompletionRequest,
   CreateCompletionRequest,
-} from 'openai/api';
+} from "openai/api";
 
 import dialogflow from "@google-cloud/dialogflow";
-import {GCJson} from "../../../../gc";
+import { GCJson } from "../../../../gc";
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
+import dummyData from "../../../data/dummy.json";
 
 const { project_id, private_key, client_email } = GCJson;
 
@@ -18,21 +18,56 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
+const intentToMap = (intent: string, Entity: string) => {
+  console.log(intent, Entity);
+  switch (intent) {
+    case "FIND_ALL_ENTITY":
+      if (Entity === "SHIPPER") {
+        return ({
+          shippers: dummyData.shippers,
+          consignees: [],
+          routes: [],
+        });
+      } else if (Entity === "CONSIGNEE") {
+        return ({
+          shippers: [],
+          consignees: dummyData.consignees,
+          routes: [],
+        });
+      }
+
+      return ({
+        shippers: [],
+        consignees: [],
+        routes: [],
+      });
+    case "ALL_ACTIVE":
+      return dummyData
+    default:
+      return ({
+        shippers: [],
+        consignees: [],
+        routes: [],
+      });
+  }
+};
 
 export async function POST(request: NextRequest) {
   const { message } = await request.json();
-  
+
   let config = {
     credentials: {
-        private_key,
+      private_key,
       client_email,
     },
   };
 
-
   const sessionClient = new dialogflow.SessionsClient(config);
 
-  const sessionPath = sessionClient.projectAgentSessionPath(project_id, randomUUID());
+  const sessionPath = sessionClient.projectAgentSessionPath(
+    project_id,
+    randomUUID()
+  );
   const requestObj = {
     session: sessionPath,
     queryInput: {
@@ -46,7 +81,7 @@ export async function POST(request: NextRequest) {
   const responses = await sessionClient.detectIntent(requestObj);
 
   const result = responses[0].queryResult;
-  if(!result) {
+  if (!result) {
     return new Response("Dialog Flow error", {
       status: 401,
       headers: {
@@ -61,13 +96,17 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       message: result.fulfillmentText,
       intent: result.intent.displayName,
+      map: intentToMap(
+        result?.intent?.displayName || "",
+        result?.parameters?.fields?.Entity?.stringValue || ""
+      ),
     });
   }
 
   // const completion = await openai.createChatCompletion({
   //   model: "gpt-3.5-turbo",
   //   messages: [
-  //     {"role": "system", "content": ""}, 
+  //     {"role": "system", "content": ""},
   //     {role: "user", content: "Hello world"}],
   // });
 
@@ -77,11 +116,8 @@ export async function POST(request: NextRequest) {
   //   message: completion.data.choices[0].message,
   //   intent: "OPEN AI"
   // });
-  
-   return NextResponse.json({
-      message: "NOPE",
-   
-    });
-    
 
+  return NextResponse.json({
+    message: "Sorry I'm struggling to understand that. Can you try again?",
+  });
 }

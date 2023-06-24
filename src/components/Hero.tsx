@@ -39,7 +39,7 @@ export const Hero = (): JSX.Element => {
           </div>
         </m.div>
       )}
-      {!active && fetching && !error && (
+      {fetching && !error && (
         <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

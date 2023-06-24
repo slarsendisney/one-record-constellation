@@ -9,7 +9,7 @@ import { useGlobe } from "@/context/GlobeContext";
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string;
 
 export const Globe = (): JSX.Element => {
-  const { setMap, loaded, active, map} = useGlobe();
+  const { setMap, loaded, fetching, active, map} = useGlobe();
 
   useEffect(() => {
     const map = new mapboxgl.Map({
@@ -42,7 +42,7 @@ export const Globe = (): JSX.Element => {
         opacity: 0,
       }}
       animate={{
-        opacity: active ? 1 : loaded ? 0.5 : 0,
+        opacity: active &&!fetching ? 1 : loaded ? 0.5 : 0,
       }}
       transition={{
         delay: active?0: 1,

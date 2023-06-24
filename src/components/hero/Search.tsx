@@ -89,6 +89,9 @@ export const Search = () => {
           if (searchInput.length === 0 && browserSupportsSpeechRecognition) {
             SpeechRecognition.startListening();
           }
+          else {
+            onSubmit();
+          }
         }}
       >
         {listening ? (

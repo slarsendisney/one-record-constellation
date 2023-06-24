@@ -17,9 +17,10 @@ interface GlobeContextAttributes {
   active: boolean;
   setActive: React.Dispatch<React.SetStateAction<boolean>>;
   fetching: boolean;
-  onSubmit: (message: string) => void;
+  onSubmit: (message: string, littleError?:boolean) => void;
   error: string | undefined;
   reset: () => void;
+  messages: { message: string; user: "AI" | "USER" }[];
 }
 
 const GlobeContext = React.createContext<GlobeContextAttributes>({
@@ -28,10 +29,11 @@ const GlobeContext = React.createContext<GlobeContextAttributes>({
   loaded: false,
   active: false,
   setActive: () => {},
-  onSubmit: (message: string) => {},
+  onSubmit: (message: string, littleError?:boolean) => {},
   fetching: false,
   error: undefined,
   reset: () => {},
+  messages: [],
 });
 
 export const GlobeProvider = ({ children }: { children: JSX.Element }) => {
@@ -41,31 +43,136 @@ export const GlobeProvider = ({ children }: { children: JSX.Element }) => {
   const [error, setError] = useState<string | undefined>(undefined);
   const [shouldSpin, setShouldSpin] = useState(true);
   const [requestLoading, setRequestLoading] = useState(false);
+  const [markers, setMarkers] = useState<mapboxgl.Marker[]>([]);
+  const [routes, setRoutes] = useState<string[]>([]);
+  const [messages, setMessages] = useState<
+    { message: string; user: "AI" | "USER" }[]
+  >([]);
 
+  const [requestData, setRequestData] = useState<any>(undefined);
 
-  const onSubmit = useCallback((message: string) => {
-    setError(undefined);
-    setRequestLoading(true);
-    fetch("/api/search", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (!res.intent) {
-          setError("Sorry, I didn't understand that. Please try again.");
-        } else {
-          setActive(true);
-        }
+  const clear = useCallback(() => {
+    markers.forEach((marker) => {
+      marker.remove();
+    });
+    if (!map) return;
 
-        setRequestLoading(false);
+    routes.forEach((route) => {
+      map.removeLayer(route);
+      map.removeSource(route);
+    });
+    setMarkers([]);
+    setRoutes([]);
+  }, [markers, map, routes]);
+
+  const onSubmit = useCallback(
+    (message: string, littleError: boolean = false) => {
+      clear();
+      const newMessages = [...messages, { message, user: "USER" }] as {
+        message: string;
+        user: "AI" | "USER";
+      }[];
+      setMessages(newMessages);
+      setError(undefined);
+      setRequestLoading(true);
+      fetch("/api/search", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (!res.intent) {
+            if (littleError) {
+              newMessages.push({ message: res.message, user: "AI" });
+              setMessages(newMessages);
+            } else {
+              setError("Sorry, I didn't understand that. Please try again.");
+            }
+          } else {
+            setRequestData(res);
+            setActive(true);
+            newMessages.push({ message: res.message, user: "AI" });
+            setMessages(newMessages);
+          }
+
+          setRequestLoading(false);
+        });
+    },
+    [clear, messages]
+  );
+
+  useEffect(() => {
+    if (!map || !requestData || !requestData.map) return;
+
+    const {
+      map: { shippers, consignees, routes },
+    } = requestData;
+
+    const markers = [] as mapboxgl.Marker[];
+    const routeSources = [] as string[];
+
+    shippers.map(
+      (shipper: { id: string; name: string; location: [number, number] }) => {
+        const el = document.createElement("div");
+        el.className = "bg-red-800 rounded-full w-5 h-5";
+        const newMarker = new mapboxgl.Marker(el).setLngLat({
+          lat: shipper.location[1],
+          lng: shipper.location[0],
+        });
+        newMarker.addTo(map);
+        markers.push(newMarker);
+      }
+    );
+
+    consignees.map(
+      (consignee: { id: string; name: string; location: [number, number] }) => {
+        const el = document.createElement("div");
+        el.className = "bg-blue-800 rounded-full w-5 h-5";
+        const newMarker = new mapboxgl.Marker(el).setLngLat({
+          lat: consignee.location[1],
+          lng: consignee.location[0],
+        });
+        newMarker.addTo(map);
+        markers.push(newMarker);
+      }
+    );
+
+    routes.map((route: { id: string; coordinates: [number, number][] }) => {
+      map.addSource(route.id, {
+        type: "geojson",
+        data: {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "LineString",
+            coordinates: route.coordinates,
+          },
+        },
       });
-  }, []);
+      map.addLayer({
+        id: route.id,
+        type: "line",
+        source: route.id,
+        layout: {
+          "line-join": "round",
+          "line-cap": "round",
+        },
+        paint: {
+          "line-color": "#ffffff",
+          "line-width": 8,
+        },
+      });
+      routeSources.push(route.id);
+    });
+
+    setMarkers(markers);
+    setRoutes(routeSources);
+  }, [map, requestData]);
 
   useEffect(() => {
     if (!map) return;
@@ -104,15 +211,14 @@ export const GlobeProvider = ({ children }: { children: JSX.Element }) => {
         zoom: 2,
         speed: 0.1,
       });
-      map.once("moveend", () => {
-        setShouldSpin(true);
-      });
+      // map.once("moveend", () => {
+      //   setShouldSpin(true);
+      // });
     } else {
       setShouldSpin(false);
       map.flyTo({
         zoom: 1.5,
         speed: 0.1,
-     
       });
 
       map.once("moveend", () => {
@@ -163,7 +269,9 @@ export const GlobeProvider = ({ children }: { children: JSX.Element }) => {
   const reset = useCallback(() => {
     setActive(false);
     setError(undefined);
-  }, []);
+    setMessages([]);
+    clear();
+  }, [clear]);
 
   useEffect(() => {
     // on escape key press
@@ -192,6 +300,7 @@ export const GlobeProvider = ({ children }: { children: JSX.Element }) => {
         onSubmit,
         error,
         reset,
+        messages,
       }}
     >
       {children}

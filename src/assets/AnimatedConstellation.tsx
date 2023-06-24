@@ -29,7 +29,7 @@ export const AnimatedConstellation = ({
         transition={{
           repeat: Infinity,
           repeatType: "reverse",
-          duration: 0.45,
+          duration: 0.65,
           delay: 0.4,
         }}
       />
@@ -45,7 +45,7 @@ export const AnimatedConstellation = ({
         transition={{
           repeat: Infinity,
           repeatType: "reverse",
-          duration: 0.45,
+          duration: 0.65,
           delay: 0.6,
         }}
       />
@@ -61,7 +61,7 @@ export const AnimatedConstellation = ({
         transition={{
           repeat: Infinity,
           repeatType: "reverse",
-          duration: 0.45,
+          duration: 0.65,
           delay: 0.8,
         }}
       />
@@ -77,7 +77,7 @@ export const AnimatedConstellation = ({
         transition={{
           repeat: Infinity,
           repeatType: "reverse",
-          duration: 0.45,
+          duration: 0.65,
           delay: 1,
         }}
       />
@@ -93,7 +93,7 @@ export const AnimatedConstellation = ({
         transition={{
           repeat: Infinity,
           repeatType: "reverse",
-          duration: 0.45,
+          duration: 0.65,
           delay: 1.2,
         }}
       />
@@ -110,7 +110,7 @@ export const AnimatedConstellation = ({
         transition={{
           repeat: Infinity,
           repeatType: "reverse",
-          duration: 0.45,
+          duration: 0.65,
           delay: 0.5,
         }}
       />
@@ -126,7 +126,7 @@ export const AnimatedConstellation = ({
         transition={{
           repeat: Infinity,
           repeatType: "reverse",
-          duration: 0.45,
+          duration: 0.65,
           delay: 0.7,
         }}
       />
@@ -142,7 +142,7 @@ export const AnimatedConstellation = ({
         transition={{
           repeat: Infinity,
           repeatType: "reverse",
-          duration: 0.45,
+          duration: 0.65,
           delay: 0.9,
         }}
       />
@@ -158,7 +158,7 @@ export const AnimatedConstellation = ({
         transition={{
           repeat: Infinity,
           repeatType: "reverse",
-          duration: 0.45,
+          duration: 0.65,
           delay: 1.1,
         }}
       />
@@ -175,7 +175,7 @@ export const AnimatedConstellation = ({
         transition={{
           repeat: Infinity,
           repeatType: "reverse",
-          duration: 0.45,
+          duration: 0.65,
           delay: 1.3,
         }}
       />
@@ -191,7 +191,7 @@ export const AnimatedConstellation = ({
         transition={{
           repeat: Infinity,
           repeatType: "reverse",
-          duration: 0.45,
+          duration: 0.65,
           delay: 1.5,
         }}
       />
