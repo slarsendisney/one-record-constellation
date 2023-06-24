@@ -6,6 +6,7 @@ import { GuideSuccess, useGuide } from "@/components/guide";
 import { CodeBlock } from "../CodeBlock";
 import { Label } from "../Label";
 import { Input } from "../Input";
+import { Reveal } from "../Reveal";
 
 export const bashCode = (
   authEndpoint: string,
@@ -153,14 +154,14 @@ export function StepTwo() {
         onExecute={handleRequest}
       />
 
-      {response && (
+      <Reveal show={!!response}>
         <div ref={responseBlockRef}>
           <CodeBlock
             languages={[{ code: response, label: "tsx", value: "tsx" }]}
             noHeader
           />
         </div>
-      )}
+      </Reveal>
 
       <div ref={continueRef}>
         <GuideSuccess title="You're authorized" show={isResponseSuccessful}>
@@ -168,13 +169,15 @@ export function StepTwo() {
             We now have an access token to send it our requests to your ONE
             Record
           </p>
-          <button
-            className="bg-green-600 rounded-md px-2 py-1 text-white"
-            onClick={nextStep}
-            disabled={currentStep !== 2}
-          >
-            Continue
-          </button>
+          <div>
+            <button
+              className="bg-green-600 rounded-md px-2 py-1 text-white"
+              onClick={nextStep}
+              disabled={currentStep !== 2}
+            >
+              Continue
+            </button>
+          </div>
         </GuideSuccess>
       </div>
     </div>

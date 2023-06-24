@@ -40,13 +40,13 @@ export function GuideStep({ children, step, title }: GuideStepProps) {
       ref={titleRef}
       id={title.toLowerCase().replaceAll(" ", "-")}
     >
-      <div className="flex pb-6 bg-white z-10 before:block before:absolute before:-top-[2.5rem] before:w-full before:h-[2.5rem] before:bg-white before:z-20">
+      <div className="flex pb-6 bg-transparent z-10 before:block before:absolute before:-top-[2.5rem] before:w-full before:h-[2.5rem] before:bg-transparent before:z-20">
         <div
           className={`relative before:block before:absolute before:top-[0.25rem] before:-left-[3.38rem] before:w-[1.5rem] before:h-[1.5rem] before:border-[1px] before:rounded-full before:z-10 before:transition-all before:duration-500 ${
-            currentStep > step ? "before:bg-green-500" : "before:bg-white"
+            currentStep > step ? "before:bg-one-record-blue" : "before:bg-white"
           } ${
             currentStep >= step
-              ? "before:border-green-500"
+              ? "before:border-one-record-blue"
               : "before:border-gray-200"
           }`}
         >
@@ -54,7 +54,9 @@ export function GuideStep({ children, step, title }: GuideStepProps) {
         </div>
         <h2
           className={`text-xl py-1 px-2 rounded-sm font-semibold ${
-            currentStep >= step ? "bg-[#EFFBF7]" : "bg-gray-400 text-gray-400"
+            currentStep >= step
+              ? "bg-one-record-blue-100"
+              : "bg-gray-200 text-gray-400"
           }`}
         >
           {title}
@@ -62,7 +64,7 @@ export function GuideStep({ children, step, title }: GuideStepProps) {
       </div>
       <div
         className={`overflow-hidden transition-max-height duration-1000 px-1 ${
-          currentStep >= step ? "visible max-h-[500rem]" : "invisible max-h-0"
+          currentStep >= step ? "visible max-h-[250rem]" : "invisible max-h-0"
         }`}
       >
         {children}

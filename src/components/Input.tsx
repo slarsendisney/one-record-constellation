@@ -2,8 +2,8 @@
 import { ChangeEvent } from "react";
 
 type Props = {
-  id: string;
-  type: string;
+  id?: string;
+  type?: string;
   value: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   readOnly?: boolean;

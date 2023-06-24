@@ -11,6 +11,7 @@ module.exports = {
       colors: {
         "one-record-blue": {
           DEFAULT: "#1F33FAff",
+          100: "#e3e6fc",
         },
       },
       backgroundImage: {

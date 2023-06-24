@@ -398,14 +398,28 @@ export function StepThree() {
         </div>
       </Reveal>
 
-      <GuideSuccess title="Logistics Objects created">
-        <button
-          className="bg-green-600 rounded-md px-2 py-1 text-white"
-          onClick={nextStep}
-          disabled={currentStep !== 3}
-        >
-          Continue
-        </button>
+      <GuideSuccess
+        title="Logistics Objects created"
+        show={isResponseSuccessful3}
+      >
+        <p>
+          We have now populated our ONE Record server with Logistics Objects
+          that are ready to track your Product as it ships its way across the
+          world.
+        </p>
+        <p>
+          Let&apos;s send some events to update the status of the product as it
+          is shipped on each part of its journey.
+        </p>
+        <div>
+          <button
+            className="bg-green-600 rounded-md px-2 py-1 text-white"
+            onClick={nextStep}
+            disabled={currentStep !== 3}
+          >
+            Continue
+          </button>
+        </div>
       </GuideSuccess>
     </div>
   );

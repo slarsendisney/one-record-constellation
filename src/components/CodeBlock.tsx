@@ -34,15 +34,15 @@ export function CodeBlock({
   const [languageIndex, setLanguageIndex] = useState(initialLanguageIndex);
 
   return (
-    <div className="flex flex-col bg=[#052035] rounded-xl">
+    <div className="flex flex-col bg-[#052035] rounded-xl">
       {!noHeader && (
-        <div className="flex items-center border-b-[1px] border-b-[rgba(255, 255, 255, 0.2)] py-1">
+        <div className="flex items-center border-b-[1px] border-b-[rgba(255, 255, 255, 0.2)] pt-1">
           {languages.map(({ label, value }, i) => (
             <button
-              className={`text-white py-2 px-1 mr-1 border-b-[1px] ${
+              className={`text-white p-2 mr-1 border-b-[1px] ${
                 languages[languageIndex].value === value
                   ? "border-b-white"
-                  : "border-b-[#052035] hover:border-b-gray-200"
+                  : "border-b-[#052035]"
               }`}
               key={value}
               onClick={() => setLanguageIndex(i)}
@@ -64,7 +64,7 @@ export function CodeBlock({
       {onExecute && (
         <div className="flex flex-row-reverse p-2 border-t-[1px] border-t-[rgba(255, 255, 255, 0.2)]">
           <button
-            className="bg-[#315d81] px-4"
+            className="bg-one-record-blue-100 px-4 rounded-md hover:opacity-60"
             // isLoading={isExecuting}
             disabled={isRequestDisabled}
             onClick={onExecute}

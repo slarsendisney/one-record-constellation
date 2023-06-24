@@ -9,7 +9,7 @@ export function Reveal({ children, show }: GuideSuccessProps) {
   return (
     <div
       className={`transition-max-height duration-1000 overflow-hidden max-h-0 ${
-        show ? "max-h-[50rem] visible" : "invisible"
+        show ? "max-h-[250rem] visible" : "invisible"
       }`}
     >
       {children}
