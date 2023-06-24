@@ -8,7 +8,8 @@ import dialogflow from "@google-cloud/dialogflow";
 import { GCJson } from "../../../../gc";
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
-import dummyData from "../../../data/dummy.json";
+import {dummyData} from "../../../data/dummy";
+import { getLogisticsObjects } from "../logistics-objects/route";
 
 const { project_id, private_key, client_email } = GCJson;
 
@@ -18,42 +19,47 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-const intentToMap = (intent: string, Entity: string) => {
-  console.log(intent, Entity);
+const intentToMap = (data:{
+  shippers: { id: string; name: string; location: number[] }[];
+  consignees: { id: string; name: string; location: number[] }[];
+  routes: { id: string; coordinates: number[][] }[];
+}, intent: string, Entity: string) => {
   switch (intent) {
     case "FIND_ALL_ENTITY":
       if (Entity === "SHIPPER") {
-        return ({
-          shippers: dummyData.shippers,
+        return {
+          shippers: data.shippers,
           consignees: [],
           routes: [],
-        });
+        };
       } else if (Entity === "CONSIGNEE") {
-        return ({
+        return {
           shippers: [],
-          consignees: dummyData.consignees,
+          consignees: data.consignees,
           routes: [],
-        });
+        };
       }
 
-      return ({
+      return {
         shippers: [],
         consignees: [],
         routes: [],
-      });
+      };
     case "ALL_ACTIVE":
-      return dummyData
+      console.log(data.routes.map((d) => d.coordinates));
+      return data;
     default:
-      return ({
+      return {
         shippers: [],
         consignees: [],
         routes: [],
-      });
+      };
   }
 };
 
 export async function POST(request: NextRequest) {
   const { message } = await request.json();
+  const sampleData = await dummyData();
 
   let config = {
     credentials: {
@@ -78,7 +84,10 @@ export async function POST(request: NextRequest) {
     },
   };
 
-  const responses = await sessionClient.detectIntent(requestObj);
+  const [responses, logisticsObjects] = await Promise.all([
+    sessionClient.detectIntent(requestObj),
+    getLogisticsObjects("https://london.one-record.lhind.dev"),
+  ]);
 
   const result = responses[0].queryResult;
   if (!result) {
@@ -93,29 +102,27 @@ export async function POST(request: NextRequest) {
   }
 
   if (result.intent && result.intent.displayName !== "FALLBACK") {
+    console.log(result);
     return NextResponse.json({
       message: result.fulfillmentText,
       intent: result.intent.displayName,
+      parameters: result?.parameters,
       map: intentToMap(
+        sampleData,
         result?.intent?.displayName || "",
         result?.parameters?.fields?.Entity?.stringValue || ""
       ),
     });
   }
 
-  // const completion = await openai.createChatCompletion({
-  //   model: "gpt-3.5-turbo",
-  //   messages: [
-  //     {"role": "system", "content": ""},
-  //     {role: "user", content: "Hello world"}],
-  // });
+  const completion = await openai.createChatCompletion({
+    model: "gpt-3.5-turbo",
+    messages: [
+      {"role": "system", "content": "You are a helpful AI assistant."},
+      {role: "user", content: message}],
+  });
 
-  // console.log(completion.data.choices[0].message);
-
-  // return NextResponse.json({
-  //   message: completion.data.choices[0].message,
-  //   intent: "OPEN AI"
-  // });
+  console.log(completion.data.choices[0].message);
 
   return NextResponse.json({
     message: "Sorry I'm struggling to understand that. Can you try again?",

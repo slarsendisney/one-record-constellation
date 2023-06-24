@@ -6,10 +6,13 @@ import { StepThree } from "@/components/guide-steps/StepThree";
 import { DataIsland } from "@/components/guide-steps/DataIsland";
 import { StepFour } from "@/components/guide-steps/StepFour";
 import { StepFive } from "@/components/guide-steps/StepFive";
+import { Nav } from "@/components/Nav";
 
 export default function GuidePage() {
   return (
-    <div className="p-10">
+    <>
+    <Nav className=""/>
+    <div className="p-10 text-white">
       <Guide sidebar={<DataIsland />}>
         <GuideStep title="Personalize your guide">
           <StepOne />
@@ -28,5 +31,6 @@ export default function GuidePage() {
         </GuideStep>
       </Guide>
     </div>
+    </>
   );
 }

@@ -1,4 +1,5 @@
 "use client";
+import {m} from "framer-motion";
 import { useEffect, useRef, ReactNode } from "react";
 
 import { smoothScroll } from "@/lib/helpers";
@@ -35,7 +36,15 @@ export function GuideStep({ children, step, title }: GuideStepProps) {
   }, [currentStep, step]);
 
   return step ? (
-    <div
+    <m.div
+      initial={{
+        opacity: 0,
+        y: 50,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
       className="flex flex-col scroll-mt-5 relative"
       ref={titleRef}
       id={title.toLowerCase().replaceAll(" ", "-")}
@@ -55,8 +64,8 @@ export function GuideStep({ children, step, title }: GuideStepProps) {
         <h2
           className={`text-xl py-1 px-2 rounded-sm font-semibold ${
             currentStep >= step
-              ? "bg-one-record-blue-100"
-              : "bg-gray-200 text-gray-400"
+              ? "bg-one-record-blue"
+              : "border-gray-200 border-2 text-gray-300"
           }`}
         >
           {title}
@@ -69,6 +78,6 @@ export function GuideStep({ children, step, title }: GuideStepProps) {
       >
         {children}
       </div>
-    </div>
+    </m.div>
   ) : null;
 }

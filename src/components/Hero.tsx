@@ -80,7 +80,7 @@ export const Hero = (): JSX.Element => {
             </m.div>
             <Search />
             <Suggestions />
-            <Links />
+            {/* <Links /> */}
             <Credits />
           </m.div>
         )}

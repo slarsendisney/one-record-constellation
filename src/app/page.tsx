@@ -6,7 +6,7 @@ import { GlobeProvider } from "@/context/GlobeContext";
 export default function GlobePage() {
   return (
     <GlobeProvider>
-      <div style={{ backgroundColor: "#06122A" }}>
+      <div >
         <Hero />
         <Globe />
         <Messaging />

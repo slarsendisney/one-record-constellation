@@ -3,13 +3,13 @@ import { useGlobe } from "@/context/GlobeContext";
 import { m } from "framer-motion";
 
 const sampleQuestions = [
-    "View all active cargo",
-    "Show me all my shippers?",
-    "What is running late?",
-    "Waybill with ID 123",
-    "Time for waybill 123",
-    "What requires attention?",
-]
+  "Help me get started",
+  "View all active cargo",
+  "Show me all my shippers?",
+  "What is running late?",
+  "Teach me about objects",
+  "API overview",
+];
 
 export const Suggestions = ({
   delayed = true,

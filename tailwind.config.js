@@ -13,6 +13,9 @@ module.exports = {
           DEFAULT: "#1F33FAff",
           100: "#e3e6fc",
         },
+        "one-record-dark": {
+          DEFAULT: "#06122A",
+        },
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

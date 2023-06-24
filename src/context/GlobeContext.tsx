@@ -9,6 +9,7 @@ import React, {
   useCallback,
 } from "react";
 import mapboxgl from "mapbox-gl";
+import { useRouter } from "next/navigation";
 
 interface GlobeContextAttributes {
   setMap: React.Dispatch<React.SetStateAction<mapboxgl.Map | undefined>>;
@@ -42,9 +43,12 @@ export const GlobeProvider = ({ children }: { children: JSX.Element }) => {
   const [active, setActive] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
   const [shouldSpin, setShouldSpin] = useState(true);
+  const [hasNavigated, setHasNavigated] = useState(false);
   const [requestLoading, setRequestLoading] = useState(false);
   const [markers, setMarkers] = useState<mapboxgl.Marker[]>([]);
   const [routes, setRoutes] = useState<string[]>([]);
+  const { push } = useRouter();
+
   const [messages, setMessages] = useState<
     { message: string; user: "AI" | "USER" }[]
   >([]);
@@ -65,8 +69,16 @@ export const GlobeProvider = ({ children }: { children: JSX.Element }) => {
     setRoutes([]);
   }, [markers, map, routes]);
 
+  const reset = useCallback(() => {
+    clear();
+    setActive(false);
+    setError(undefined);
+    setMessages([]);
+  }, [clear]);
+
   const onSubmit = useCallback(
     (message: string, littleError: boolean = false) => {
+      console.log("submitting", message);
       clear();
       const newMessages = [...messages, { message, user: "USER" }] as {
         message: string;
@@ -107,7 +119,36 @@ export const GlobeProvider = ({ children }: { children: JSX.Element }) => {
   );
 
   useEffect(() => {
-    if (!map || !requestData || !requestData.map) return;
+    setTimeout(() => {
+      setHasNavigated(false);
+    }, 2000);
+    if (!map || !requestData || !requestData.map || hasNavigated) return;
+
+    if (requestData.intent === "ONBOARDING") {
+      push("/guide");
+      setRequestData(undefined);
+      setHasNavigated(true);
+      return;
+    }
+
+    if (requestData.intent === "API_LINK") {
+      window.open("https://iata-cargo.github.io/ONE-Record", "_blank");
+      setRequestData(undefined);
+      setHasNavigated(true);
+      reset();
+      return;
+    }
+
+    if (requestData.intent === "API_PAGE_LINK") {
+      window.open(
+        `https://iata-cargo.github.io/ONE-Record${requestData.parameters.fields.APIPageURL.stringValue}`,
+        "_blank"
+      );
+      setRequestData(undefined);
+      setHasNavigated(true);
+      reset();
+      return;
+    }
 
     const {
       map: { shippers, consignees, routes },
@@ -119,11 +160,23 @@ export const GlobeProvider = ({ children }: { children: JSX.Element }) => {
     shippers.map(
       (shipper: { id: string; name: string; location: [number, number] }) => {
         const el = document.createElement("div");
-        el.className = "bg-red-800 rounded-full w-5 h-5";
+        el.className = "bg-red-600 rounded-full w-4 h-4";
+        const popup = new mapboxgl.Popup({ offset: 25 })
+          .setText(shipper.name)
+          .on("open", () => {
+            map.flyTo({
+              center: {
+                lat: shipper.location[1],
+                lng: shipper.location[0],
+              },
+              speed: 0.2,
+            });
+          });
         const newMarker = new mapboxgl.Marker(el).setLngLat({
           lat: shipper.location[1],
           lng: shipper.location[0],
         });
+        newMarker.setPopup(popup);
         newMarker.addTo(map);
         markers.push(newMarker);
       }
@@ -133,16 +186,35 @@ export const GlobeProvider = ({ children }: { children: JSX.Element }) => {
       (consignee: { id: string; name: string; location: [number, number] }) => {
         const el = document.createElement("div");
         el.className = "bg-blue-800 rounded-full w-5 h-5";
+        const popup = new mapboxgl.Popup({ offset: 25 })
+        .setText(consignee.name)
+        .on("open", () => {
+          map.flyTo({
+            center: {
+              lat: consignee.location[1],
+              lng: consignee.location[0],
+            },
+            speed: 0.2,
+          });
+        });
         const newMarker = new mapboxgl.Marker(el).setLngLat({
           lat: consignee.location[1],
           lng: consignee.location[0],
         });
+        newMarker.setPopup(popup);
         newMarker.addTo(map);
         markers.push(newMarker);
       }
     );
 
     routes.map((route: { id: string; coordinates: [number, number][] }) => {
+      try {
+        map.removeLayer(route.id);
+      } catch (e) {}
+      try {
+        map.removeSource(route.id);
+      } catch (e) {}
+
       map.addSource(route.id, {
         type: "geojson",
         data: {
@@ -173,18 +245,18 @@ export const GlobeProvider = ({ children }: { children: JSX.Element }) => {
     setMarkers(markers);
     setRoutes(routeSources);
 
-    if (shippers.length > 0) {
-      setTimeout(() => {
-        map.flyTo({
-          center: {
-            lat: shippers[0].location[1],
-            lng: shippers[0].location[0],
-          },
-          zoom: 3,
-          speed: 0.2,
-        });
-      }, 1000);
-    }
+    // if (shippers.length > 0) {
+    //   setTimeout(() => {
+    //     map.flyTo({
+    //       center: {
+    //         lat: shippers[0].location[1],
+    //         lng: shippers[0].location[0],
+    //       },
+    //       zoom: 3,
+    //       speed: 0.2,
+    //     });
+    //   }, 1000);
+    // }
   }, [map, requestData]);
 
   useEffect(() => {
@@ -278,13 +350,6 @@ export const GlobeProvider = ({ children }: { children: JSX.Element }) => {
       clearInterval(spinInterval);
     };
   }, [map, shouldSpin]);
-
-  const reset = useCallback(() => {
-    setActive(false);
-    setError(undefined);
-    setMessages([]);
-    clear();
-  }, [clear]);
 
   useEffect(() => {
     // on escape key press

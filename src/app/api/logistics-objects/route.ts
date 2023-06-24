@@ -5,21 +5,7 @@ import admin from "firebase-admin";
 import { storage } from "../../../../firebase-admin";
 import { authenticate } from "../authenticate/route";
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const server_url = searchParams.get("server_url");
-
-  if (!server_url) {
-    return new Response(null, {
-      status: 400,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
-    });
-  }
-
+export async function getLogisticsObjects(server_url: string) {
   const auth = await authenticate(
     process.env.ONE_RECORD_CLIENT_ID,
     process.env.ONE_RECORD_CLIENT_SECRET,
@@ -35,7 +21,7 @@ export async function GET(request: NextRequest) {
 
     const res = await Promise.all(
       ids.map(async (id: string) => {
-        const res = await fetch(`${server_url}/${id}`, {
+        const res = await fetch(`${server_url}/logistics-objects/${id}`, {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
@@ -45,10 +31,28 @@ export async function GET(request: NextRequest) {
       })
     );
 
-    return NextResponse.json(res);
+    return res;
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const server_url = searchParams.get("server_url");
+
+  if (!server_url) {
+    return new Response(null, {
+      status: 400,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+    });
+  }
+  const res = await getLogisticsObjects(server_url);
+  return NextResponse.json(res);
 }
 
 export async function POST(request: NextRequest) {

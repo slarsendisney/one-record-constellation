@@ -14,7 +14,7 @@ export const Links = (): JSX.Element => {
     }} className=" max-w-3xl w-full">
       <div className="w-full opacity-10 border-t-2 pt-4"></div>
       <div className="grid md:grid-cols-2 w-full gap-4">
-        <Link href="/guide" className="bg-blue-700 hover:bg-blue-800 text-white w-full py-2 rounded">
+        <Link href="/guide" className="bg-blue-700 text-center hover:bg-blue-800 text-white w-full py-2 rounded">
             Onboarding
         </Link>
         <button className="bg-yellow-400 hover:bg-yellow-500 text-blue-900 w-full py-2 rounded">

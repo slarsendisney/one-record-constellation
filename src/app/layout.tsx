@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" className="bg-one-record-dark">
         <AnimationProvider>
           <body className={inter.className}>{children}</body>
         </AnimationProvider>
