@@ -21,7 +21,7 @@ const openai = new OpenAIApi(configuration);
 
 export async function POST(request: NextRequest) {
   const { message } = await request.json();
-  console.log(GCJson)
+  
   let config = {
     credentials: {
         private_key,
