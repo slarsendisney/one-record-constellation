@@ -3,24 +3,11 @@ import { headers } from "next/headers";
 import admin from "firebase-admin";
 
 import { storage } from "../../../../firebase-admin";
+import { authenticate } from "../authenticate/route";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const server_url = searchParams.get("server_url");
-
-  const headersList = headers();
-  const authorization = headersList.get("authorization");
-
-  if (!authorization) {
-    return new Response(null, {
-      status: 401,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
-    });
-  }
 
   if (!server_url) {
     return new Response(null, {
@@ -33,6 +20,15 @@ export async function GET(request: NextRequest) {
     });
   }
 
+  const auth = await authenticate(
+    process.env.ONE_RECORD_CLIENT_ID,
+    process.env.ONE_RECORD_CLIENT_SECRET,
+    process.env.ONE_RECORD_ENDPOINT as string,
+    process.env.ONE_RECORD_SCOPE
+  );
+
+  const { access_token } = auth;
+
   try {
     const doc = await storage.collection("data").doc("logistics-objects").get();
     const ids = doc.data()?.ids;
@@ -41,7 +37,7 @@ export async function GET(request: NextRequest) {
       ids.map(async (id: string) => {
         const res = await fetch(`${server_url}/${id}`, {
           headers: {
-            Authorization: authorization,
+            Authorization: `Bearer ${access_token}`,
           },
         });
         const resJson = await res.json();

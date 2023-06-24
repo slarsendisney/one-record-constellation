@@ -17,7 +17,7 @@ interface GlobeContextAttributes {
   active: boolean;
   setActive: React.Dispatch<React.SetStateAction<boolean>>;
   fetching: boolean;
-  onSubmit: (message: string, littleError?:boolean) => void;
+  onSubmit: (message: string, littleError?: boolean) => void;
   error: string | undefined;
   reset: () => void;
   messages: { message: string; user: "AI" | "USER" }[];
@@ -29,7 +29,7 @@ const GlobeContext = React.createContext<GlobeContextAttributes>({
   loaded: false,
   active: false,
   setActive: () => {},
-  onSubmit: (message: string, littleError?:boolean) => {},
+  onSubmit: (message: string, littleError?: boolean) => {},
   fetching: false,
   error: undefined,
   reset: () => {},
@@ -172,6 +172,19 @@ export const GlobeProvider = ({ children }: { children: JSX.Element }) => {
 
     setMarkers(markers);
     setRoutes(routeSources);
+
+    if (shippers.length > 0) {
+      setTimeout(() => {
+        map.flyTo({
+          center: {
+            lat: shippers[0].location[1],
+            lng: shippers[0].location[0],
+          },
+          zoom: 3,
+          speed: 0.2,
+        });
+      }, 1000);
+    }
   }, [map, requestData]);
 
   useEffect(() => {

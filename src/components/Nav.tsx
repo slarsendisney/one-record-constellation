@@ -4,17 +4,23 @@ import { UserButton } from "@clerk/nextjs";
 import { m } from "framer-motion";
 import Link from "next/link";
 
-export const Nav = ({ className }: { className?: string }) => {
+export const Nav = ({
+  className,
+  onLogoClick,
+}: {
+  className?: string;
+  onLogoClick?: () => void;
+}) => {
   return (
     <nav
       className={
-        (className ||"") +
+        (className || "") +
         " w-full items-center flex justify-between px-6 hover:bg-one-record-blue transition-colors duration-300 py-4 mx-auto"
       }
     >
-        <Link href="/">
-            <OneRecordLogo className="w-6" />
-        </Link>
+      <Link href="/" onClick={onLogoClick}>
+        <OneRecordLogo className="w-6" />
+      </Link>
 
       <m.div
         initial={{ opacity: 0, x: 50 }}
