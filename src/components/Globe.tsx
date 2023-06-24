@@ -13,13 +13,13 @@ export const Globe = (): JSX.Element => {
 
   useEffect(() => {
     const map = new mapboxgl.Map({
-      container: "map", // container ID
-      style: "mapbox://styles/mapbox/streets-v11", // style URL
-      center: [-74.5, 40], // starting position [lng, lat]
-      zoom: 0.5, // starting zoom
+      container: "map",
+      style: "mapbox://styles/mapbox/streets-v11", 
+      center: [-74.5, 40], 
+      zoom: 1.5, 
       projection: {
         name: "globe",
-      }, // display the map as a 3D globe
+      },
     });
 
     setMap(map);
