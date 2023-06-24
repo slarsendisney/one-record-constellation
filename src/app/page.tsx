@@ -3,6 +3,17 @@ import Image from "next/image";
 import { UserButton } from "@clerk/nextjs";
 import { m } from "framer-motion";
 
+// import { initializeApp } from "firebase/app";
+// const firebaseConfig = {
+//   apiKey: "AIzaSyBpV_b07G1kEMyrs7NlBVTyxU0GGAXSyUE",
+//   authDomain: "one-record-constellation.firebaseapp.com",
+//   projectId: "one-record-constellation",
+//   storageBucket: "one-record-constellation.appspot.com",
+//   messagingSenderId: "251556249163",
+//   appId: "1:251556249163:web:8f9d965d3190279c1757ce",
+// };
+// const app = initializeApp(firebaseConfig);
+
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 overflow-hidden">
@@ -28,7 +39,7 @@ export default function Home() {
 
       <m.div
         initial={{ scale: 1, opacity: 0 }}
-        animate={{ scale: [1, 1.5, 1], opacity: 1, }}
+        animate={{ scale: [1, 1.5, 1], opacity: 1 }}
         transition={{ delay: 0.2 }}
         className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px]"
       >
@@ -44,7 +55,7 @@ export default function Home() {
 
       <m.div
         initial={{ y: 300 }}
-        animate={{ y: 0}}
+        animate={{ y: 0 }}
         transition={{ delay: 1.2 }}
         className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left"
       >
