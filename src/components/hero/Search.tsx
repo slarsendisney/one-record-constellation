@@ -6,13 +6,13 @@ import {
   MicrophoneIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 
 export const Search = () => {
-  const { setActive } = useGlobe();
+  const { onSubmit: submitQuestion } = useGlobe();
   const [searchInput, setSearchInput] = useState("");
   const {
     transcript,
@@ -25,11 +25,18 @@ export const Search = () => {
     setSearchInput(transcript);
   }, [transcript]);
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     if (searchInput.length > 0) {
-      setActive(true);
+      submitQuestion(searchInput);
     }
-  };
+  }, [searchInput, submitQuestion]);
+
+  // when listening switches from true to false, submit the question
+  useEffect(() => {
+    if (!listening && searchInput.length > 0) {
+      onSubmit();
+    }
+  }, [listening, onSubmit, searchInput.length]);
 
   return (
     <m.div
@@ -59,21 +66,24 @@ export const Search = () => {
         className="border-white bg-black bg-opacity-20 border-2 text-white rounded-lg pl-6 pr-4 py-3.5 text-lg w-full bg-transparent"
       />
 
-      <button className="absolute top-0 right-0 h-full flex items-center mr-3" onClick={() => {
-        if(listening){
+      <button
+        className="absolute top-0 right-0 h-full flex items-center mr-3"
+        onClick={() => {
+          if (listening) {
             SpeechRecognition.stopListening();
-        }
-        if(searchInput.length === 0 && browserSupportsSpeechRecognition){
+          }
+          if (searchInput.length === 0 && browserSupportsSpeechRecognition) {
             SpeechRecognition.startListening();
-        }
-
-      }}>
-        {
-            listening ? <StopIcon className="h-9 w-9 text-white p-1.5 bg-red-600 rounded-lg" /> :
-            browserSupportsSpeechRecognition && searchInput.length === 0 ? <MicrophoneIcon className="h-9 w-9 text-white p-1.5 bg-blue-600 rounded-lg" /> :
-            <MagnifyingGlassIcon className="h-9 w-9 text-white p-1.5 bg-blue-600 rounded-lg" />
-        }
-       
+          }
+        }}
+      >
+        {listening ? (
+          <StopIcon className="h-9 w-9 text-white p-1.5 bg-red-600 rounded-lg" />
+        ) : searchInput.length === 0 ? (
+          <MicrophoneIcon className="h-9 w-9 text-white p-1.5 bg-blue-600 rounded-lg" />
+        ) : (
+          <MagnifyingGlassIcon className="h-9 w-9 text-white p-1.5 bg-blue-600 rounded-lg" />
+        )}
       </button>
     </m.div>
   );
