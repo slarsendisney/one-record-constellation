@@ -25,3 +25,14 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+
+.mapboxgl-ctrl-bottom-left {
+  opacity: 0;
+  display: none;
+}
+
+.mapboxgl-ctrl-bottom-right {
+  opacity: 0;
+  display: none;
+}
