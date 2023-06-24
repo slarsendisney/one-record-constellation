@@ -2,6 +2,15 @@
 import { useGlobe } from "@/context/GlobeContext";
 import { m } from "framer-motion";
 
+const sampleQuestions = [
+    "Show me all active cargo?",
+    "Test Suggestion",
+    "Test Suggestion",
+    "Test Suggestion",
+    "Test Suggestion",
+    "Test Suggestion",
+]
+
 export const Suggestions = ({
   delayed = true,
 }: {
@@ -10,7 +19,7 @@ export const Suggestions = ({
   const { onSubmit: questionSubmit } = useGlobe();
   return (
     <div className="grid md:grid-cols-3 max-w-3xl w-full gap-4">
-      {[1, 2, 3, 4, 5, 6].map((_, i) => (
+      {sampleQuestions.map((value, i) => (
         <m.button
           initial={{
             opacity: 0,
@@ -26,11 +35,10 @@ export const Suggestions = ({
           key={i}
           className="bg-black text-left bg-opacity-40 hover:bg-opacity-60 rounded p-4 w-full"
           onClick={() => {
-            console.log("Test Suggestion")
-            questionSubmit("Test Suggestion");
+            questionSubmit(value);
           }}
         >
-          <p className="text-white font-bold">Test Suggestion</p>
+          <p className="text-white font-bold">{value}</p>
         </m.button>
       ))}
     </div>

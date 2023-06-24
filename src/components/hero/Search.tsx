@@ -14,12 +14,19 @@ import SpeechRecognition, {
 export const Search = () => {
   const { onSubmit: submitQuestion } = useGlobe();
   const [searchInput, setSearchInput] = useState("");
+  const [isUsingVoice, setIsUsingVoice] = useState(false);
   const {
     transcript,
     listening,
     resetTranscript,
     browserSupportsSpeechRecognition,
   } = useSpeechRecognition();
+
+  useEffect(() => {
+    if (listening) {
+      setIsUsingVoice(true);
+    }
+  }, [listening]);
 
   useEffect(() => {
     setSearchInput(transcript);
@@ -33,10 +40,15 @@ export const Search = () => {
 
   // when listening switches from true to false, submit the question
   useEffect(() => {
-    if (!listening && searchInput.length > 0) {
+    if (!listening && isUsingVoice && searchInput.length > 0) {
       onSubmit();
     }
-  }, [listening, onSubmit, searchInput.length]);
+  }, [isUsingVoice, listening, onSubmit, searchInput.length]);
+
+  // autofocus the search input when rendered
+  useEffect(() => {
+    document.getElementById("search")?.focus();
+  }, []);
 
   return (
     <m.div
@@ -54,6 +66,8 @@ export const Search = () => {
       className="relative max-w-3xl w-full"
     >
       <input
+        id="search"
+        autoComplete="off"
         value={searchInput}
         onChange={(e) => {
           setSearchInput(e.target.value);
@@ -63,7 +77,7 @@ export const Search = () => {
             onSubmit();
           }
         }}
-        className="border-white bg-black bg-opacity-20 border-2 text-white rounded-lg pl-6 pr-4 py-3.5 text-lg w-full bg-transparent"
+        className="border-white bg-black bg-opacity-20 border-2 text-white rounded-lg pl-6 pr-4 py-3.5 text-lg w-full bg-transparent focus:ring-0 focus:ring-offset-0"
       />
 
       <button

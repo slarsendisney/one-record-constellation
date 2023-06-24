@@ -4,16 +4,16 @@ try {
   if (!admin.apps.length) {
     admin.initializeApp({
       credential: admin.credential.cert({
-        project_id: process.env.FIREBASE_ADMIN_PROJECT_ID,
-        private_key: process.env.FIREBASE_ADMIN_PRIVATE_KEY.replace(
+        projectId: process.env.FIREBASE_ADMIN_PROJECT_ID as string,
+        privateKey: (process.env.FIREBASE_ADMIN_PRIVATE_KEY as string).replace(
           /\\n/g,
           "\n"
         ),
-        client_email: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
+        clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
       }),
     });
   }
-} catch (error) {
+} catch (error: any) {
   if (!/already exists/u.test(error.message)) {
     console.error("Firebase admin initialization error", error.stack);
   }

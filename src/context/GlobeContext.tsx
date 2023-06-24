@@ -42,6 +42,7 @@ export const GlobeProvider = ({ children }: { children: JSX.Element }) => {
   const [shouldSpin, setShouldSpin] = useState(true);
   const [requestLoading, setRequestLoading] = useState(false);
 
+
   const onSubmit = useCallback((message: string) => {
     setError(undefined);
     setRequestLoading(true);
@@ -111,7 +112,7 @@ export const GlobeProvider = ({ children }: { children: JSX.Element }) => {
       map.flyTo({
         zoom: 1.5,
         speed: 0.1,
-        center: [-74.5, 40],
+     
       });
 
       map.once("moveend", () => {

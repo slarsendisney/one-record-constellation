@@ -1,10 +1,22 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+
+import { Configuration, OpenAIApi } from 'openai';
+import {
+  CreateChatCompletionRequest,
+  CreateCompletionRequest,
+} from 'openai/api';
+
 import dialogflow from "@google-cloud/dialogflow";
-import gcKey from "../../../../gc.json";
+import {GCJson} from "../../../../gc";
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 
-const { project_id, private_key, client_email } = gcKey;
+const { project_id, private_key, client_email } = GCJson;
+
+const configuration = new Configuration({
+  apiKey: process.env.OPEN_AI_API_KEY,
+});
+
+const openai = new OpenAIApi(configuration);
 
 
 export async function POST(request: NextRequest) {
@@ -50,10 +62,19 @@ export async function POST(request: NextRequest) {
     });
   }
 
+  // const completion = await openai.createChatCompletion({
+  //   model: "gpt-3.5-turbo",
+  //   messages: [
+  //     {"role": "system", "content": ""}, 
+  //     {role: "user", content: "Hello world"}],
+  // });
 
-  return NextResponse.json({
-    message: "ONTO OPEN AI"
-  });
+  // console.log(completion.data.choices[0].message);
+
+  // return NextResponse.json({
+  //   message: completion.data.choices[0].message,
+  //   intent: "OPEN AI"
+  // });
   
 
 }
