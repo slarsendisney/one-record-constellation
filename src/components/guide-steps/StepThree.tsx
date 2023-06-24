@@ -219,8 +219,8 @@ export function StepThree() {
       <p>
         Now it is time to define the logistics objects that we want to model and
         track. For the purpose of this guide we are going to create a product
-        that we are going to track from a shipper in London, through
-        it&apos;flights, to the consignee in Dubai.
+        that we are going to track from a shipper in London, through it&apos;s
+        flight, to the consignee in Dubai.
       </p>
 
       <p>

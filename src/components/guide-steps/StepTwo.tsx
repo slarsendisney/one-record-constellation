@@ -166,8 +166,8 @@ export function StepTwo() {
       <div ref={continueRef}>
         <GuideSuccess title="You're authorized" show={isResponseSuccessful}>
           <p>
-            We now have an access token to send it our requests to your ONE
-            Record
+            We now have an access token to send it in our requests to your ONE
+            Record server.
           </p>
           <div>
             <button
