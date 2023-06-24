@@ -7,6 +7,7 @@ import { GuideSuccess, useGuide } from "@/components/guide";
 import { Label } from "../Label";
 import { Input } from "../Input";
 import { Reveal } from "../Reveal";
+import { Loading } from "../Loading";
 
 export const bashCode = (
   serverUrl: string,
@@ -131,6 +132,13 @@ export function StepThree() {
       if (res.ok) {
         const resJson = await res.json();
         setResponse1(JSON.stringify(resJson, null, 2));
+        dispatch({
+          type: "UPDATE_DATA",
+          payload: {
+            ...data,
+            productLocation: resJson.headers.location,
+          },
+        });
         setIsResponseSuccessful1(true);
         smoothScroll(continueRef1);
       } else {
@@ -299,7 +307,6 @@ export function StepThree() {
           <div className="flex flex-col">
             <Label htmlFor="3-shipper-code">Shipper</Label>
             <CodeBlock
-              isExecuting={isLoadingRequest2}
               languages={[
                 {
                   code: bashCode(
@@ -318,7 +325,6 @@ export function StepThree() {
           <div className="flex flex-col">
             <Label htmlFor="3-consignee-code">Consignee</Label>
             <CodeBlock
-              isExecuting={isLoadingRequest2}
               languages={[
                 {
                   code: bashCode(
@@ -335,10 +341,10 @@ export function StepThree() {
           </div>
 
           <button
-            className="bg-green-600 rounded-md px-2 py-1 text-white"
+            className="bg-green-600 rounded-md px-2 py-1 text-white flex justify-center"
             onClick={submitShipperAndConsignee}
           >
-            Submit Shipper and Consignee
+            {isLoadingRequest2 ? <Loading /> : "Submit Shipper and Consignee"}
           </button>
         </div>
       </Reveal>

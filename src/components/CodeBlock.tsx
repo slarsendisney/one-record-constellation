@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { okaidia } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { Loading } from "./Loading";
 
 const theme = {
   ...okaidia,
@@ -64,12 +65,11 @@ export function CodeBlock({
       {onExecute && (
         <div className="flex flex-row-reverse p-2 border-t-[1px] border-t-[rgba(255, 255, 255, 0.2)]">
           <button
-            className="bg-one-record-blue-100 px-4 rounded-md hover:opacity-60"
-            // isLoading={isExecuting}
+            className="bg-one-record-blue-100 px-4 rounded-md hover:opacity-60 w-40 flex justify-center"
             disabled={isRequestDisabled}
             onClick={onExecute}
           >
-            Run the request
+            {isExecuting ? <Loading /> : "Run the request"}
           </button>
         </div>
       )}

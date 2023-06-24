@@ -1,10 +1,13 @@
 import { authMiddleware } from "@clerk/nextjs";
 
 export default authMiddleware({
-  ignoredRoutes: ["/api/logistics-objects", "/api/authenticate", "/api/search"],
-  publicRoutes: [
-    "/globe",
-  ]
+  ignoredRoutes: [
+    "/api/logistics-events",
+    "/api/logistics-objects",
+    "/api/authenticate",
+    "/api/search",
+  ],
+  publicRoutes: ["/globe"],
 });
 
 export const config = {

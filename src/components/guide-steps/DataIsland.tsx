@@ -11,6 +11,7 @@ export function DataIsland() {
     serverUrl: string;
     clientId: string;
     accessToken: string;
+    productLocation: string;
   }>();
 
   return (
@@ -45,6 +46,12 @@ export function DataIsland() {
             <div className="flex flex-col mb-2">
               <b className="font-semibold">Access Token</b>
               <Input value={data.accessToken} />
+            </div>
+          )}
+          {data.productLocation && (
+            <div className="flex flex-col">
+              <b className="font-semibold">Product Location</b>
+              <Input value={data.productLocation} />
             </div>
           )}
         </>
