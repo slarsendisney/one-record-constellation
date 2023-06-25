@@ -22,7 +22,7 @@ export function DataIsland() {
           : "translate-x-96 opacity-0"
       }`}
     >
-      <div className="flex flex-col p-6 min-h-[12rem] text-sm">
+      <div className="flex flex-col p-6 min-h-[12rem] text-sm text-black">
         <>
           {data.authEndpoint && (
             <div className="flex flex-col mb-2">

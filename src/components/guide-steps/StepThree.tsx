@@ -213,7 +213,7 @@ export function StepThree() {
     } catch (error) {
       setResponse1(`An unknown error ocurred: ${JSON.stringify(error)}`);
     }
-    setIsLoadingRequest1(false);
+    setIsLoadingRequest3(false);
   }
 
   function nextStep() {

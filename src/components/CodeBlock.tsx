@@ -65,7 +65,7 @@ export function CodeBlock({
       {onExecute && (
         <div className="flex flex-row-reverse p-2 border-t-[1px] border-t-[rgba(255, 255, 255, 0.2)]">
           <button
-            className="bg-one-record-blue-100 px-4 rounded-md hover:opacity-60 w-40 flex justify-center"
+            className="bg-one-record-blue-100 px-4 rounded-md hover:opacity-60 w-40 flex justify-center text-black"
             disabled={isRequestDisabled}
             onClick={onExecute}
           >

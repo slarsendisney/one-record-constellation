@@ -1,5 +1,5 @@
 "use client";
-import {m} from "framer-motion";
+import { m } from "framer-motion";
 import { useEffect, useRef, ReactNode } from "react";
 
 import { smoothScroll } from "@/lib/helpers";

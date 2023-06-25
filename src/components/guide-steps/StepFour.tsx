@@ -132,7 +132,7 @@ export function StepFour() {
       </Reveal>
 
       <div ref={continueRef}>
-        <GuideSuccess title="You're authorized" show={isResponseSuccessful}>
+        <GuideSuccess title="Event sent!" show={isResponseSuccessful}>
           <p>We have now successfully:</p>
           <ul className="list-disc list-inside">
             <li>Authenticated with the auth server</li>

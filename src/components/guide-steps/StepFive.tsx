@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export function StepFive() {
   return (
-    <div className="flex flex-col gap-6 my-4">
+    <div className="flex flex-col gap-6 my-4 text-black">
       <Link
         href="/"
         className="rounded-lg bg-one-record-blue-100 p-4 flex justify-between hover:-translate-y-1 transition-all duration-200 shadow-md hover:shadow-lg"
