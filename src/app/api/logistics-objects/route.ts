@@ -50,12 +50,12 @@ export async function POST(request: NextRequest) {
     });
     const id = res.headers.get("location")?.split(`${server_url}/`)[1];
 
-    // await storage
-    //   .collection("data")
-    //   .doc("logistics-objects")
-    //   .update({
-    //     ids: admin.firestore.FieldValue.arrayUnion(id),
-    //   });
+    await storage
+      .collection("data")
+      .doc("logistics-objects")
+      .update({
+        ids: admin.firestore.FieldValue.arrayUnion(id),
+      });
 
     return NextResponse.json({
       headers: {
