@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { getLogisticsObjects } from "@/utils/getLogisticsObjects";
+import admin from "firebase-admin";
+import { storage } from "../../../../firebase-admin";
 
 
 export async function GET(request: NextRequest) {
