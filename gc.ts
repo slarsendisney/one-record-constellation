@@ -1,4 +1,5 @@
 function replaceAll(str: string, find: string, replace: string) {
+  if(!str) return str
   return str.replace(new RegExp(find, 'g'), replace);
 }
 

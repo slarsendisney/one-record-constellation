@@ -8,7 +8,7 @@ import dialogflow from "@google-cloud/dialogflow";
 import { GCJson } from "../../../../gc";
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
-import {dummyData} from "../../../data/dummy";
+import { dummyData } from "../../../data/dummy";
 import { getLogisticsObjects } from "../logistics-objects/route";
 
 const { project_id, private_key, client_email } = GCJson;
@@ -19,7 +19,7 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-const intentToMap = (data:any, intent: string, Entity: string) => {
+const intentToMap = (data: any, intent: string, Entity: string) => {
   switch (intent) {
     case "FIND_ALL_ENTITY":
       if (Entity === "SHIPPER") {
@@ -42,7 +42,7 @@ const intentToMap = (data:any, intent: string, Entity: string) => {
         routes: [],
       };
     case "ALL_ACTIVE":
-      console.log(data.routes.map((d:any ) => d.coordinates));
+      console.log(data.routes.map((d: any) => d.coordinates));
       return data;
     default:
       return {
@@ -80,9 +80,12 @@ export async function POST(request: NextRequest) {
     },
   };
 
-  const [responses, logisticsObjects] = await Promise.all([
+  const [
+    responses,
+    // logisticsObjects
+  ] = await Promise.all([
     sessionClient.detectIntent(requestObj),
-    getLogisticsObjects("https://london.one-record.lhind.dev"),
+    // getLogisticsObjects("https://london.one-record.lhind.dev"),
   ]);
 
   const result = responses[0].queryResult;
@@ -114,8 +117,9 @@ export async function POST(request: NextRequest) {
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: [
-      {"role": "system", "content": "You are a helpful AI assistant."},
-      {role: "user", content: message}],
+      { role: "system", content: "You are a helpful AI assistant." },
+      { role: "user", content: message },
+    ],
   });
 
   console.log(completion.data.choices[0].message);
