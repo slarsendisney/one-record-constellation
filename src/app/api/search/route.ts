@@ -21,6 +21,14 @@ const openai = new OpenAIApi(configuration);
 
 const intentToMap = (data: any, intent: string, Entity: string) => {
   switch (intent) {
+    case "ALL_LATE": {
+      const routes = data.routes.slice(0, 5);
+      return {
+        shippers: data.shippers,
+        consignees: data.consignees,
+        routes,
+      };
+    }
     case "FIND_ALL_ENTITY":
       if (Entity === "SHIPPER") {
         return {

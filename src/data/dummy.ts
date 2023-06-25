@@ -23,28 +23,30 @@ export const dummyData = async () => {
     lng: number
   }[];
 
-  return {
-    shippers: filteredUsers.slice(0, (filteredUsers.length-1)/2).map((user) => {
-      return {
-        id: user.name,
-        name: user.name,
-        location: [user.lng, user.lat],
-      };
-    }),
-    consignees: filteredUsers.slice(filteredUsers.length/2, filteredUsers.length-1 ).map((user) => {
-      return {
-        id: user.name,
-        name: user.name,
-        location: [user.lng, user.lat],
-      };
-    }),
+  const shippers  = filteredUsers.slice(0, (filteredUsers.length-1)/2).map((user) => {
+    return {
+      id: user.name,
+      name: user.name,
+      location: [user.lng, user.lat],
+    };
+  })
 
-    routes: filteredUsers.slice(0, (filteredUsers.length/2)).map((user, i) => {
+  const consignees = filteredUsers.slice(filteredUsers.length/2, filteredUsers.length-1 ).map((user) => {
+    return {
+      id: user.name,
+      name: user.name,
+      location: [user.lng, user.lat],
+    };
+  })
+  return {
+    shippers, 
+    consignees,
+    routes: shippers.map((user, i) => {
       return {
         id: user.name,
         coordinates: [
-          [user.lng, user.lat],
-          [randomUsers[i + (filteredUsers.length/2) -1]?.lng, randomUsers[i + (filteredUsers.length/2)-1]?.lat],
+          [user.location[0], user.location?.[1]],
+          [consignees[i]?.location[0], consignees[i]?.location[1]],
         ],
       };
     }),
