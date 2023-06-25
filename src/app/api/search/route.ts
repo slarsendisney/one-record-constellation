@@ -19,11 +19,7 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-const intentToMap = (data:{
-  shippers: { id: string; name: string; location: number[] }[];
-  consignees: { id: string; name: string; location: number[] }[];
-  routes: { id: string; coordinates: number[][] }[];
-}, intent: string, Entity: string) => {
+const intentToMap = (data:any, intent: string, Entity: string) => {
   switch (intent) {
     case "FIND_ALL_ENTITY":
       if (Entity === "SHIPPER") {
@@ -46,7 +42,7 @@ const intentToMap = (data:{
         routes: [],
       };
     case "ALL_ACTIVE":
-      console.log(data.routes.map((d) => d.coordinates));
+      console.log(data.routes.map((d:any ) => d.coordinates));
       return data;
     default:
       return {
