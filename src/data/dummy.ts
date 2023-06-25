@@ -17,7 +17,11 @@ export const dummyData = async () => {
     })
   );
 
-  const filteredUsers = randomUsers.filter((user) => user && user.name && user.lat && user.lng);
+  const filteredUsers = randomUsers.filter((user) => user && user.name && user.lat && user.lng) as {
+    name: string,
+    lat: number,
+    lng: number
+  }[];
 
   return {
     shippers: filteredUsers.slice(0, (filteredUsers.length-1)/2).map((user) => {
