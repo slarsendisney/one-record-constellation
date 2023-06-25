@@ -9,7 +9,7 @@ import { GCJson } from "../../../../gc";
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { dummyData } from "../../../data/dummy";
-import { getLogisticsObjects } from "../logistics-objects/route";
+import { getLogisticsObjects } from "../../../utils/getLogisticsObjects";
 
 const { project_id, private_key, client_email } = GCJson;
 
